@@ -1,0 +1,485 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Settings</title><meta name="generator" content="MATLAB 9.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-11-14"><meta name="DC.source" content="Settings.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#2">Initialization code.</a></li><li><a href="#4">Button Update Reference Image</a></li><li><a href="#5">Button Add slots</a></li><li><a href="#6">Button Camera Configuration</a></li><li><a href="#7">Parameter Tweaking options</a></li></ul></div><pre class="codeinput"><span class="keyword">function</span> varargout = Settings(varargin)
+</pre><h2 id="2">Initialization code.</h2><pre class="codeinput">gui_Singleton = 1;
+gui_State = struct(<span class="string">'gui_Name'</span>,       mfilename, <span class="keyword">...</span>
+    <span class="string">'gui_Singleton'</span>,  gui_Singleton, <span class="keyword">...</span>
+    <span class="string">'gui_OpeningFcn'</span>, @Settings_OpeningFcn, <span class="keyword">...</span>
+    <span class="string">'gui_OutputFcn'</span>,  @Settings_OutputFcn, <span class="keyword">...</span>
+    <span class="string">'gui_LayoutFcn'</span>,  [] , <span class="keyword">...</span>
+    <span class="string">'gui_Callback'</span>,   []);
+<span class="keyword">if</span> nargin &amp;&amp; ischar(varargin{1})
+    gui_State.gui_Callback = str2func(varargin{1});
+<span class="keyword">end</span>
+
+<span class="keyword">if</span> nargout
+    [varargout{1:nargout}] = gui_mainfcn(gui_State, varargin{:});
+<span class="keyword">else</span>
+    gui_mainfcn(gui_State, varargin{:});
+<span class="keyword">end</span>
+<span class="comment">% End initialization code</span>
+</pre><pre class="codeinput"><span class="keyword">function</span> Settings_OpeningFcn(hObject, eventdata, handles, varargin)
+handles.output = hObject;
+guidata(hObject, handles);
+<span class="keyword">if</span> strcmp(get(hObject,<span class="string">'Visible'</span>),<span class="string">'off'</span>)
+    initial = imread(<span class="string">'initialsp1.png'</span>);                              <span class="comment">% application logo print in axes1</span>
+    imagesc(initial);
+    axis <span class="string">off</span>;
+<span class="keyword">end</span>
+
+<span class="keyword">function</span> varargout = Settings_OutputFcn(hObject, eventdata, handles)
+varargout{1} = handles.output;
+
+
+<span class="comment">% --- Executes on selection change in popupmenu1.</span>
+<span class="keyword">function</span> popupmenu1_Callback(hObject, eventdata, handles)
+popup_sel_index = get(handles.popupmenu1, <span class="string">'Value'</span>);
+<span class="keyword">switch</span> popup_sel_index
+    <span class="keyword">case</span> 1
+        refimg = imread(<span class="string">'refcam1.jpg'</span>);
+        imagesc(refimg)
+        axis <span class="string">off</span>;
+    <span class="keyword">case</span> 2
+        refimg = imread(<span class="string">'refcam2.jpg'</span>);
+        imagesc(refimg)
+        axis <span class="string">off</span>;
+<span class="keyword">end</span>
+
+<span class="comment">% --- Executes during object creation, after setting all properties.</span>
+<span class="keyword">function</span> popupmenu1_CreateFcn(hObject, eventdata, handles)
+<span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+    set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+<span class="keyword">end</span>
+set(hObject, <span class="string">'String'</span>, {<span class="string">'Camera1'</span>, <span class="string">'Camera2'</span>});
+</pre><h2 id="4">Button Update Reference Image</h2><p>this will start the selected camera, take 3 consecutive images and sum them all to form a single image as reference image and save it</p><pre class="codeinput"><span class="keyword">function</span> pushbutton1_Callback(hObject, eventdata, handles)
+axes(handles.axes1);
+cla;
+popup_sel_index = get(handles.popupmenu1, <span class="string">'Value'</span>);
+<span class="keyword">switch</span> popup_sel_index
+    <span class="keyword">case</span> 1
+        <span class="keyword">try</span>
+            <span class="comment">%vid = ipcam('http://192.168.0.2:8080/video');</span>
+            vid = ipcam(camurl1);
+        <span class="keyword">catch</span> E
+            msgbox({<span class="string">'Configure The Cam Correctly!'</span>,<span class="string">' '</span>,E.message},<span class="string">'CAM INFO'</span>)
+        <span class="keyword">end</span>
+
+    <span class="keyword">case</span> 2
+        <span class="keyword">try</span>
+            <span class="comment">%vid = ipcam('http://192.168.0.3:8080/video');</span>
+            vid = ipcam(camurl1);
+        <span class="keyword">catch</span> E
+            msgbox({<span class="string">'Configure The Cam Correctly!'</span>,<span class="string">' '</span>,E.message},<span class="string">'CAM INFO'</span>)
+        <span class="keyword">end</span>
+<span class="keyword">end</span>
+guidata(hObject, handles);
+img = snapshot(vid);
+handles.vid=vid;
+hImage = image( zeros(size(img)) );
+preview(handles.vid, hImage)
+pause(5)
+img1 = snapshot(vid);        pause(1)
+img2 = snapshot(vid);        pause(1)
+img3 = snapshot(vid);        pause(1)
+closePreview(vid)
+bk_img = double(img1)+double(img2)+double(img3);
+mean_img =  uint8(bk_img / 3);
+<span class="keyword">switch</span> popup_sel_index
+    <span class="keyword">case</span> 1
+        imwrite(mean_img,<span class="string">'refcam1.jpg'</span>,<span class="string">'jpg'</span>);
+    <span class="keyword">case</span> 2
+        imwrite(mean_img,<span class="string">'refcam2.jpg'</span>,<span class="string">'jpg'</span>);
+<span class="keyword">end</span>
+imagesc(mean_img);
+axis <span class="string">off</span>;
+</pre><h2 id="5">Button Add slots</h2><p>This will openup the saved refence image and will provide with an option to select the parking spots</p><pre class="codeinput"><span class="keyword">function</span> pushbutton2_Callback(hObject, eventdata, handles)
+popup_sel_index = get(handles.popupmenu1, <span class="string">'Value'</span>);
+<span class="keyword">switch</span> popup_sel_index
+    <span class="keyword">case</span> 1
+        imageObj = imread(<span class="string">'refcam1.jpg'</span>);
+        imageHandle = imagesc(imageObj);
+        axis <span class="string">off</span>;
+        [clicked_col clicked_row rgb_info] = impixel
+        corcam1 = zeros(length(clicked_col),2);
+        <span class="keyword">if</span> ~isempty(clicked_col)
+            <span class="keyword">for</span> x=1:1:length(clicked_col)
+                corcam1(x,1) = clicked_col(x);
+                corcam1(x,2) = clicked_row(x);
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+        save(<span class="string">'slots.mat'</span>, <span class="string">'corcam1'</span>,<span class="string">'-append'</span>)
+        set(handles.listbox1, <span class="string">'String'</span>,num2str(corcam1(:,:)));
+
+    <span class="keyword">case</span> 2
+        imageObj = imread(<span class="string">'refcam2.jpg'</span>);
+        imageHandle = imagesc(imageObj);
+        axis <span class="string">off</span>;
+        [clicked_col clicked_row rgb_info] = impixel
+        corcam2 = zeros(length(clicked_col),2);
+        <span class="keyword">if</span> ~isempty(clicked_col)
+            <span class="keyword">for</span> x=1:1:length(clicked_col)
+                corcam2(x,1) = clicked_col(x);
+                corcam2(x,2) = clicked_row(x);
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+        save(<span class="string">'slots.mat'</span>, <span class="string">'corcam2'</span>,<span class="string">'-append'</span>)
+        set(handles.listbox1, <span class="string">'String'</span>,num2str(corcam2(:,:)));
+
+<span class="keyword">end</span>
+
+<span class="comment">% --- Executes on selection change in listbox1.</span>
+<span class="keyword">function</span> listbox1_Callback(hObject, eventdata, handles)
+
+
+<span class="comment">% --- Executes during object creation, after setting all properties.</span>
+<span class="keyword">function</span> listbox1_CreateFcn(hObject, eventdata, handles)
+<span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+    set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+<span class="keyword">end</span>
+</pre><h2 id="6">Button Camera Configuration</h2><p>will jump to cameraconfig function</p><pre class="codeinput"><span class="keyword">function</span> pushbutton3_Callback(hObject, eventdata, handles)
+cameraconfig()
+</pre><h2 id="7">Parameter Tweaking options</h2><p>will provide editboxes to typein parameters and will save them after pressing save button</p><pre class="codeinput"><span class="keyword">function</span> edit1_Callback(hObject, eventdata, handles)
+<span class="comment">% does nothing</span>
+
+<span class="comment">% --- Executes during object creation, after setting all properties.</span>
+<span class="keyword">function</span> edit1_CreateFcn(hObject, eventdata, handles)
+<span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+    set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+<span class="keyword">end</span>
+a=load(<span class="string">'slots.mat'</span>, <span class="string">'hsize'</span>);
+set(hObject,<span class="string">'String'</span>,num2str(a.hsize));
+
+
+<span class="keyword">function</span> edit2_Callback(hObject, eventdata, handles)
+<span class="comment">% does nothing</span>
+
+<span class="comment">% --- Executes during object creation, after setting all properties.</span>
+<span class="keyword">function</span> edit2_CreateFcn(hObject, eventdata, handles)
+<span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+    set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+<span class="keyword">end</span>
+a=load(<span class="string">'slots.mat'</span>, <span class="string">'sigma'</span>);
+set(hObject,<span class="string">'String'</span>,num2str(a.sigma));
+
+
+<span class="keyword">function</span> edit3_Callback(hObject, eventdata, handles)
+<span class="comment">% does nothing</span>
+
+<span class="comment">% --- Executes during object creation, after setting all properties.</span>
+<span class="keyword">function</span> edit3_CreateFcn(hObject, eventdata, handles)
+<span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+    set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+<span class="keyword">end</span>
+a=load(<span class="string">'slots.mat'</span>, <span class="string">'eliminate'</span>);
+set(hObject,<span class="string">'String'</span>,num2str(a.eliminate));
+
+
+<span class="keyword">function</span> edit4_Callback(hObject, eventdata, handles)
+<span class="comment">% does nothing</span>
+
+<span class="comment">% --- Executes during object creation, after setting all properties.</span>
+<span class="keyword">function</span> edit4_CreateFcn(hObject, eventdata, handles)
+<span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+    set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+<span class="keyword">end</span>
+a=load(<span class="string">'slots.mat'</span>, <span class="string">'thres'</span>);
+set(hObject,<span class="string">'String'</span>,num2str(a.thres));
+
+
+<span class="comment">% Save button</span>
+<span class="keyword">function</span> pushbutton4_Callback(hObject, eventdata, handles)
+hsize = get(handles.edit1,<span class="string">'String'</span>);
+save(<span class="string">'slots.mat'</span>, <span class="string">'hsize'</span>,<span class="string">'-append'</span>)
+sigma = get(handles.edit2,<span class="string">'String'</span>);
+save(<span class="string">'slots.mat'</span>, <span class="string">'sigma'</span>,<span class="string">'-append'</span>)
+eliminate = get(handles.edit3,<span class="string">'String'</span>);
+save(<span class="string">'slots.mat'</span>, <span class="string">'eliminate'</span>,<span class="string">'-append'</span>)
+thres = get(handles.edit4,<span class="string">'String'</span>);
+save(<span class="string">'slots.mat'</span>, <span class="string">'thres'</span>,<span class="string">'-append'</span>)
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2016b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+function varargout = Settings(varargin)
+%% Initialization code.
+gui_Singleton = 1;
+gui_State = struct('gui_Name',       mfilename, ...
+    'gui_Singleton',  gui_Singleton, ...
+    'gui_OpeningFcn', @Settings_OpeningFcn, ...
+    'gui_OutputFcn',  @Settings_OutputFcn, ...
+    'gui_LayoutFcn',  [] , ...
+    'gui_Callback',   []);
+if nargin && ischar(varargin{1})
+    gui_State.gui_Callback = str2func(varargin{1});
+end
+
+if nargout
+    [varargout{1:nargout}] = gui_mainfcn(gui_State, varargin{:});
+else
+    gui_mainfcn(gui_State, varargin{:});
+end
+% End initialization code
+
+function Settings_OpeningFcn(hObject, eventdata, handles, varargin)
+handles.output = hObject;
+guidata(hObject, handles);
+if strcmp(get(hObject,'Visible'),'off')
+    initial = imread('initialsp1.png');                              % application logo print in axes1
+    imagesc(initial);
+    axis off;
+end
+
+function varargout = Settings_OutputFcn(hObject, eventdata, handles)
+varargout{1} = handles.output;
+
+
+% REPLACE_WITH_DASH_DASH- Executes on selection change in popupmenu1.
+function popupmenu1_Callback(hObject, eventdata, handles)
+popup_sel_index = get(handles.popupmenu1, 'Value');
+switch popup_sel_index
+    case 1
+        refimg = imread('refcam1.jpg');
+        imagesc(refimg)
+        axis off;
+    case 2
+        refimg = imread('refcam2.jpg');
+        imagesc(refimg)
+        axis off;
+end
+
+% REPLACE_WITH_DASH_DASH- Executes during object creation, after setting all properties.
+function popupmenu1_CreateFcn(hObject, eventdata, handles)
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+set(hObject, 'String', {'Camera1', 'Camera2'});
+
+
+%%% Button Update Reference Image
+% this will start the selected camera, take 3 consecutive images and sum
+% them all to form a single image as reference image and save it
+function pushbutton1_Callback(hObject, eventdata, handles)
+axes(handles.axes1);
+cla;
+popup_sel_index = get(handles.popupmenu1, 'Value');
+switch popup_sel_index
+    case 1
+        try
+            %vid = ipcam('http://192.168.0.2:8080/video');
+            vid = ipcam(camurl1);
+        catch E
+            msgbox({'Configure The Cam Correctly!',' ',E.message},'CAM INFO')
+        end
+        
+    case 2
+        try
+            %vid = ipcam('http://192.168.0.3:8080/video');
+            vid = ipcam(camurl1);
+        catch E
+            msgbox({'Configure The Cam Correctly!',' ',E.message},'CAM INFO')
+        end
+end
+guidata(hObject, handles);
+img = snapshot(vid);
+handles.vid=vid;
+hImage = image( zeros(size(img)) );
+preview(handles.vid, hImage)
+pause(5)
+img1 = snapshot(vid);        pause(1)
+img2 = snapshot(vid);        pause(1)
+img3 = snapshot(vid);        pause(1)
+closePreview(vid)
+bk_img = double(img1)+double(img2)+double(img3);
+mean_img =  uint8(bk_img / 3);
+switch popup_sel_index
+    case 1
+        imwrite(mean_img,'refcam1.jpg','jpg');
+    case 2
+        imwrite(mean_img,'refcam2.jpg','jpg');
+end
+imagesc(mean_img);
+axis off;
+
+
+%%% Button Add slots
+% This will openup the saved refence image and will provide with an option
+% to select the parking spots
+function pushbutton2_Callback(hObject, eventdata, handles)
+popup_sel_index = get(handles.popupmenu1, 'Value');
+switch popup_sel_index
+    case 1
+        imageObj = imread('refcam1.jpg');
+        imageHandle = imagesc(imageObj);
+        axis off;
+        [clicked_col clicked_row rgb_info] = impixel
+        corcam1 = zeros(length(clicked_col),2);
+        if ~isempty(clicked_col)
+            for x=1:1:length(clicked_col)
+                corcam1(x,1) = clicked_col(x);
+                corcam1(x,2) = clicked_row(x);
+            end
+        end
+        save('slots.mat', 'corcam1','-append')
+        set(handles.listbox1, 'String',num2str(corcam1(:,:)));
+        
+    case 2
+        imageObj = imread('refcam2.jpg');
+        imageHandle = imagesc(imageObj);
+        axis off;
+        [clicked_col clicked_row rgb_info] = impixel
+        corcam2 = zeros(length(clicked_col),2);
+        if ~isempty(clicked_col)
+            for x=1:1:length(clicked_col)
+                corcam2(x,1) = clicked_col(x);
+                corcam2(x,2) = clicked_row(x);
+            end
+        end
+        save('slots.mat', 'corcam2','-append')
+        set(handles.listbox1, 'String',num2str(corcam2(:,:)));
+        
+end
+
+% REPLACE_WITH_DASH_DASH- Executes on selection change in listbox1.
+function listbox1_Callback(hObject, eventdata, handles)
+
+
+% REPLACE_WITH_DASH_DASH- Executes during object creation, after setting all properties.
+function listbox1_CreateFcn(hObject, eventdata, handles)
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+%%% Button Camera Configuration
+% will jump to cameraconfig function
+function pushbutton3_Callback(hObject, eventdata, handles)
+cameraconfig()
+
+
+%%% Parameter Tweaking options
+% will provide editboxes to typein parameters and will save them after
+% pressing save button
+function edit1_Callback(hObject, eventdata, handles)
+% does nothing
+
+% REPLACE_WITH_DASH_DASH- Executes during object creation, after setting all properties.
+function edit1_CreateFcn(hObject, eventdata, handles)
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+a=load('slots.mat', 'hsize');
+set(hObject,'String',num2str(a.hsize));
+
+
+function edit2_Callback(hObject, eventdata, handles)
+% does nothing
+
+% REPLACE_WITH_DASH_DASH- Executes during object creation, after setting all properties.
+function edit2_CreateFcn(hObject, eventdata, handles)
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+a=load('slots.mat', 'sigma');
+set(hObject,'String',num2str(a.sigma));
+
+
+function edit3_Callback(hObject, eventdata, handles)
+% does nothing
+
+% REPLACE_WITH_DASH_DASH- Executes during object creation, after setting all properties.
+function edit3_CreateFcn(hObject, eventdata, handles)
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+a=load('slots.mat', 'eliminate');
+set(hObject,'String',num2str(a.eliminate));
+
+
+function edit4_Callback(hObject, eventdata, handles)
+% does nothing
+
+% REPLACE_WITH_DASH_DASH- Executes during object creation, after setting all properties.
+function edit4_CreateFcn(hObject, eventdata, handles)
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+a=load('slots.mat', 'thres');
+set(hObject,'String',num2str(a.thres));
+
+
+% Save button
+function pushbutton4_Callback(hObject, eventdata, handles)
+hsize = get(handles.edit1,'String');
+save('slots.mat', 'hsize','-append')
+sigma = get(handles.edit2,'String');
+save('slots.mat', 'sigma','-append')
+eliminate = get(handles.edit3,'String');
+save('slots.mat', 'eliminate','-append')
+thres = get(handles.edit4,'String');
+save('slots.mat', 'thres','-append')
+
+##### SOURCE END #####
+--></body></html>

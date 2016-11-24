@@ -1,0 +1,481 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>MainGUI</title><meta name="generator" content="MATLAB 9.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-11-14"><meta name="DC.source" content="MainGUI.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#2">Initialization code</a></li><li><a href="#4">Button Live Feed</a></li><li><a href="#7">Button Processed</a></li><li><a href="#10">from raw color image to binary image with highlighted occupied spots</a></li><li><a href="#11">counting no of blobs</a></li><li><a href="#12">highlight strange objects</a></li><li><a href="#13">highlight Occupied and Unoccupied slots</a></li><li><a href="#14">Results</a></li><li><a href="#17">Button Settings</a></li></ul></div><pre class="codeinput"><span class="keyword">function</span> varargout = MainGUI(varargin)
+</pre><h2 id="2">Initialization code</h2><pre class="codeinput">gui_Singleton = 1;
+gui_State = struct(<span class="string">'gui_Name'</span>,       mfilename, <span class="keyword">...</span>
+    <span class="string">'gui_Singleton'</span>,  gui_Singleton, <span class="keyword">...</span>
+    <span class="string">'gui_OpeningFcn'</span>, @MainGUI_OpeningFcn, <span class="keyword">...</span>
+    <span class="string">'gui_OutputFcn'</span>,  @MainGUI_OutputFcn, <span class="keyword">...</span>
+    <span class="string">'gui_LayoutFcn'</span>,  [] , <span class="keyword">...</span>
+    <span class="string">'gui_Callback'</span>,   []);
+<span class="keyword">if</span> nargin &amp;&amp; ischar(varargin{1})
+    gui_State.gui_Callback = str2func(varargin{1});
+<span class="keyword">end</span>
+
+<span class="keyword">if</span> nargout
+    [varargout{1:nargout}] = gui_mainfcn(gui_State, varargin{:});
+<span class="keyword">else</span>
+    gui_mainfcn(gui_State, varargin{:});
+<span class="keyword">end</span>
+<span class="comment">% End initialization code</span>
+</pre><pre class="codeinput"><span class="keyword">function</span> MainGUI_OpeningFcn(hObject, eventdata, handles, varargin)
+<span class="comment">% Choose default command line output for MainGUI</span>
+handles.output = hObject;
+
+<span class="comment">% Update handles structure</span>
+guidata(hObject, handles);
+
+<span class="comment">% This sets up the initial plot - only do when we are invisible</span>
+<span class="comment">% so window can get raised using MainGUI.</span>
+<span class="keyword">if</span> strcmp(get(hObject,<span class="string">'Visible'</span>),<span class="string">'off'</span>)
+    initial = imread(<span class="string">'initialsp1.png'</span>);
+    imagesc(initial);
+    axis <span class="string">off</span>;
+<span class="keyword">end</span>
+
+<span class="comment">% --- Outputs from this function are returned to the command line.</span>
+<span class="keyword">function</span> varargout = MainGUI_OutputFcn(hObject, eventdata, handles)
+<span class="comment">% Get default command line output from handles structure</span>
+varargout{1} = handles.output;
+
+
+<span class="comment">%Executes during object creation, after setting all properties.</span>
+<span class="keyword">function</span> popupmenu1_CreateFcn(hObject, eventdata, handles)
+<span class="keyword">if</span> ispc &amp;&amp; isequal(get(hObject,<span class="string">'BackgroundColor'</span>), get(0,<span class="string">'defaultUicontrolBackgroundColor'</span>))
+    set(hObject,<span class="string">'BackgroundColor'</span>,<span class="string">'white'</span>);
+<span class="keyword">end</span>
+
+set(hObject, <span class="string">'String'</span>, {<span class="string">'Camera1'</span>, <span class="string">'Camera2'</span>});
+
+
+<span class="comment">% --- Executes on selection change in popupmenu1.</span>
+<span class="keyword">function</span> popupmenu1_Callback(hObject, eventdata, handles)
+</pre><h2 id="4">Button Live Feed</h2><p>Shows live feed from the selected camera</p><pre class="codeinput"><span class="keyword">function</span> pushbutton1_Callback(hObject, eventdata, handles)
+</pre><pre class="codeinput">axes(handles.axes1);
+cla;
+load(<span class="string">'slots.mat'</span>);
+popup_sel_index = get(handles.popupmenu1, <span class="string">'Value'</span>);
+<span class="keyword">switch</span> popup_sel_index
+    <span class="keyword">case</span> 1
+        <span class="keyword">try</span>
+            <span class="comment">%vid = ipcam('http://192.168.0.2:8080/video');</span>
+            vid = ipcam(camurl1);
+            img = snapshot(vid);
+            handles.vid=vid;
+            hImage = image( zeros(size(img)) );
+            preview(handles.vid, hImage)
+        <span class="keyword">catch</span> E
+            msgbox({<span class="string">'Configure The Cam Correctly!'</span>,<span class="string">' '</span>,E.message},<span class="string">'CAM INFO'</span>)
+        <span class="keyword">end</span>
+        guidata(hObject, handles);
+
+    <span class="keyword">case</span> 2
+        <span class="keyword">try</span>
+            <span class="comment">%vid = ipcam('http://192.168.0.3:8080/video');</span>
+            vid = ipcam(camurl2);
+            img = snapshot(vid);
+            handles.vid=vid;
+            hImage = image( zeros(size(img)) );
+            preview(handles.vid, hImage)
+        <span class="keyword">catch</span> E
+            msgbox({<span class="string">'Configure The Cam Correctly!'</span>,<span class="string">' '</span>,E.message},<span class="string">'CAM INFO'</span>)
+        <span class="keyword">end</span>
+        guidata(hObject, handles);
+
+<span class="keyword">end</span>
+</pre><h2 id="7">Button Processed</h2><p>campures image from selected camera and processes it to find parked and vacant slots</p><pre class="codeinput"><span class="keyword">function</span> pushbutton2_Callback(hObject, eventdata, handles)
+</pre><pre class="codeinput">axes(handles.axes1);
+cla;
+load(<span class="string">'slots.mat'</span>);
+popup_sel_index = get(handles.popupmenu1, <span class="string">'Value'</span>);
+<span class="keyword">switch</span> popup_sel_index
+    <span class="keyword">case</span> 1
+        <span class="keyword">try</span>
+            <span class="comment">% vid = ipcam('http://192.168.0.2:8080/video');</span>
+            vid = ipcam(camurl1);
+            bck_image = double(imread(<span class="string">'refcam1.jpg'</span>));
+            bck_img = bck_image(:,:,1);
+            nodes = load(<span class="string">'slots.mat'</span>, <span class="string">'corcam1'</span>);
+            nodes = nodes.corcam1;
+            tps=size(nodes);
+            tps=tps(1);
+
+        <span class="keyword">catch</span> E
+            msgbox({<span class="string">'Configure The Cam Correctly!'</span>,<span class="string">' '</span>,E.message},<span class="string">'CAM INFO'</span>)
+        <span class="keyword">end</span>
+
+    <span class="keyword">case</span> 2
+        <span class="keyword">try</span>
+            <span class="comment">%vid = ipcam('http://192.168.0.3:8080/video');</span>
+            vid = ipcam(camurl2);
+            bck_image = double(imread(<span class="string">'refcam2.jpg'</span>));
+            bck_img = bck_image(:,:,1);
+            nodes = load(<span class="string">'slots.mat'</span>, <span class="string">'corcam2'</span>);
+            nodes = nodes.corcam2;
+            tps=size(nodes);
+            tps=tps(1);
+
+        <span class="keyword">catch</span> E
+            msgbox({<span class="string">'Configure The Cam Correctly!'</span>,<span class="string">' '</span>,E.message},<span class="string">'CAM INFO'</span>)
+        <span class="keyword">end</span>
+<span class="keyword">end</span>
+guidata(hObject, handles);
+img = snapshot(vid);
+handles.vid=vid;
+hImage = image( zeros(size(img)));
+preview(handles.vid, hImage)
+<span class="keyword">while</span> 1
+</pre><h2 id="10">from raw color image to binary image with highlighted occupied spots</h2><pre class="codeinput">    himage2 = snapshot(vid);
+    num3 = load(<span class="string">'slots.mat'</span>, <span class="string">'thres'</span>);num3 = str2double(num3.thres);          <span class="comment">%threshold</span>
+    num4 = load(<span class="string">'slots.mat'</span>, <span class="string">'eliminate'</span>);num4= str2double(num4.eliminate);   <span class="comment">%bwareopen</span>
+    hsize = load(<span class="string">'slots.mat'</span>, <span class="string">'hsize'</span>);hsize= str2double(hsize.hsize);        <span class="comment">%gaussian filter</span>
+    sigma = load(<span class="string">'slots.mat'</span>, <span class="string">'sigma'</span>);sigma=str2double(sigma.sigma);
+    gaus_filt = fspecial(<span class="string">'gaussian'</span>,hsize , sigma);
+
+    <span class="comment">%%SE = strel('diamond', 0);                                   %this makes a matrice object for passing into imdilate()</span>
+    img_tmp = double(himage2);                                    <span class="comment">%load image and convert to double for computation</span>
+    img2 = img_tmp(:,:,1);                                        <span class="comment">%reduce to just the first dimension</span>
+    sub_img = (img2 - bck_img);                                   <span class="comment">%subtract background from the image</span>
+    gaus_img = filter2(gaus_filt,sub_img,<span class="string">'same'</span>);                 <span class="comment">%gaussian blurr the image</span>
+    thres_img = (gaus_img &lt; num3);
+    thres_img = ~thres_img;
+    thres_img = bwareaopen(thres_img,num4);
+    thres_img = ~thres_img;
+    se2 = strel(<span class="string">'disk'</span>,1);
+    thres_img = imerode(thres_img,se2);
+</pre><h2 id="11">counting no of blobs</h2><pre class="codeinput">    thres_img = ~thres_img;
+    [L, num] = bwlabel(thres_img);
+    stats = regionprops(L, <span class="string">'Centroid'</span>);
+    thres_img = ~thres_img;
+</pre><h2 id="12">highlight strange objects</h2><pre class="codeinput">    img3 = himage2;
+    <span class="comment">% circle parameters</span>
+    r = 15;                                                                    <span class="comment">% radius</span>
+    t = linspace(0, 2*pi, 20);                                                 <span class="comment">% approximate circle with 50 points</span>
+
+    <span class="keyword">for</span> k=1:1:num
+        c = [stats(k,1).Centroid(1) stats(k,1).Centroid(2)];                   <span class="comment">% center()</span>
+        BW = poly2mask(r*cos(t)+c(1), r*sin(t)+c(2), size(img,1), size(img,2));<span class="comment">% create a circular mask</span>
+        clr = [0 0 255];            <span class="comment">% Blue color for circle</span>
+        a = 0.8;                    <span class="comment">% blending factor</span>
+        z = false(size(BW));
+        mask = cat(3,BW,z,z); img3(mask) = a*clr(1) + (1-a)*img3(mask);
+        mask = cat(3,z,BW,z); img3(mask) = a*clr(2) + (1-a)*img3(mask);
+        mask = cat(3,z,z,BW); img3(mask) = a*clr(3) + (1-a)*img3(mask);
+    <span class="keyword">end</span>
+</pre><h2 id="13">highlight Occupied and Unoccupied slots</h2><pre class="codeinput">    num2 = 0;
+    <span class="keyword">for</span> k=1:1:tps
+        c = [nodes(k,1) nodes(k,2)];                   <span class="comment">% center</span>
+        BW = poly2mask(r*cos(t)+c(1), r*sin(t)+c(2), size(img,1), size(img,2));<span class="comment">% create a circular mask</span>
+        <span class="keyword">if</span> thres_img(nodes(k,1),nodes(k,2))== 0
+            clr = [255 0 0 ];            <span class="comment">% Red color for circle</span>
+            num2 = num2 + 1;             <span class="comment">% counting no of filled spots</span>
+        <span class="keyword">else</span>
+            clr = [0 255 0 ];            <span class="comment">% Green color for circle</span>
+        <span class="keyword">end</span>
+        a = 0.8;                         <span class="comment">% blending factor</span>
+        z = false(size(BW));
+        mask = cat(3,BW,z,z); img3(mask) = a*clr(1) + (1-a)*img3(mask);
+        mask = cat(3,z,BW,z); img3(mask) = a*clr(2) + (1-a)*img3(mask);
+        mask = cat(3,z,z,BW); img3(mask) = a*clr(3) + (1-a)*img3(mask);
+    <span class="keyword">end</span>
+</pre><h2 id="14">Results</h2><pre class="codeinput">    <span class="comment">%set the status panel</span>
+    set(handles.text1, <span class="string">'String'</span>,<span class="string">'Total                 :'</span>);
+    set(handles.text2, <span class="string">'String'</span>,<span class="string">'Occupied         :'</span>);
+    set(handles.text3, <span class="string">'String'</span>,<span class="string">'vacant               :'</span>);
+    set(handles.text4, <span class="string">'String'</span>,num2str(tps));
+    set(handles.text5, <span class="string">'String'</span>,num2str(num2));
+    set(handles.text6, <span class="string">'String'</span>,num2str(tps-num2));
+
+    imagesc(img3);
+    axis <span class="string">off</span>;
+    pause(.1)
+</pre><pre class="codeinput"><span class="keyword">end</span>
+</pre><h2 id="17">Button Settings</h2><p>Jumps to Settings function</p><pre class="codeinput"><span class="keyword">function</span> pushbutton3_Callback(hObject, eventdata, handles)
+<span class="comment">%closePreview(vid);</span>
+Settings()
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2016b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+function varargout = MainGUI(varargin)
+%% Initialization code
+gui_Singleton = 1;
+gui_State = struct('gui_Name',       mfilename, ...
+    'gui_Singleton',  gui_Singleton, ...
+    'gui_OpeningFcn', @MainGUI_OpeningFcn, ...
+    'gui_OutputFcn',  @MainGUI_OutputFcn, ...
+    'gui_LayoutFcn',  [] , ...
+    'gui_Callback',   []);
+if nargin && ischar(varargin{1})
+    gui_State.gui_Callback = str2func(varargin{1});
+end
+
+if nargout
+    [varargout{1:nargout}] = gui_mainfcn(gui_State, varargin{:});
+else
+    gui_mainfcn(gui_State, varargin{:});
+end
+% End initialization code
+
+function MainGUI_OpeningFcn(hObject, eventdata, handles, varargin)
+% Choose default command line output for MainGUI
+handles.output = hObject;
+
+% Update handles structure
+guidata(hObject, handles);
+
+% This sets up the initial plot - only do when we are invisible
+% so window can get raised using MainGUI.
+if strcmp(get(hObject,'Visible'),'off')
+    initial = imread('initialsp1.png');
+    imagesc(initial);
+    axis off;
+end
+
+% REPLACE_WITH_DASH_DASH- Outputs from this function are returned to the command line.
+function varargout = MainGUI_OutputFcn(hObject, eventdata, handles)
+% Get default command line output from handles structure
+varargout{1} = handles.output;
+
+
+%Executes during object creation, after setting all properties.
+function popupmenu1_CreateFcn(hObject, eventdata, handles)
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end
+
+set(hObject, 'String', {'Camera1', 'Camera2'});
+
+
+% REPLACE_WITH_DASH_DASH- Executes on selection change in popupmenu1.
+function popupmenu1_Callback(hObject, eventdata, handles)
+
+%%% Button Live Feed 
+% Shows live feed from the selected camera
+function pushbutton1_Callback(hObject, eventdata, handles)
+axes(handles.axes1);
+cla;
+load('slots.mat');
+popup_sel_index = get(handles.popupmenu1, 'Value');
+switch popup_sel_index
+    case 1
+        try
+            %vid = ipcam('http://192.168.0.2:8080/video');
+            vid = ipcam(camurl1);
+            img = snapshot(vid);
+            handles.vid=vid;
+            hImage = image( zeros(size(img)) );
+            preview(handles.vid, hImage)
+        catch E
+            msgbox({'Configure The Cam Correctly!',' ',E.message},'CAM INFO')
+        end
+        guidata(hObject, handles);
+        
+    case 2
+        try
+            %vid = ipcam('http://192.168.0.3:8080/video');
+            vid = ipcam(camurl2);
+            img = snapshot(vid);
+            handles.vid=vid;
+            hImage = image( zeros(size(img)) );
+            preview(handles.vid, hImage)
+        catch E
+            msgbox({'Configure The Cam Correctly!',' ',E.message},'CAM INFO')
+        end
+        guidata(hObject, handles);
+        
+end
+%%
+
+%%% Button Processed 
+% campures image from selected camera and processes it to find parked and
+% vacant slots
+function pushbutton2_Callback(hObject, eventdata, handles)
+axes(handles.axes1);
+cla;
+load('slots.mat');
+popup_sel_index = get(handles.popupmenu1, 'Value');
+switch popup_sel_index
+    case 1
+        try
+            % vid = ipcam('http://192.168.0.2:8080/video');
+            vid = ipcam(camurl1);
+            bck_image = double(imread('refcam1.jpg'));
+            bck_img = bck_image(:,:,1);
+            nodes = load('slots.mat', 'corcam1');
+            nodes = nodes.corcam1;
+            tps=size(nodes);
+            tps=tps(1);
+            
+        catch E
+            msgbox({'Configure The Cam Correctly!',' ',E.message},'CAM INFO')
+        end
+        
+    case 2
+        try
+            %vid = ipcam('http://192.168.0.3:8080/video');
+            vid = ipcam(camurl2);
+            bck_image = double(imread('refcam2.jpg'));
+            bck_img = bck_image(:,:,1);
+            nodes = load('slots.mat', 'corcam2');
+            nodes = nodes.corcam2;
+            tps=size(nodes);
+            tps=tps(1);
+            
+        catch E
+            msgbox({'Configure The Cam Correctly!',' ',E.message},'CAM INFO')
+        end
+end
+guidata(hObject, handles);
+img = snapshot(vid);
+handles.vid=vid;
+hImage = image( zeros(size(img)));
+preview(handles.vid, hImage)
+while 1
+    %% from raw color image to binary image with highlighted occupied spots
+    himage2 = snapshot(vid);
+    num3 = load('slots.mat', 'thres');num3 = str2double(num3.thres);          %threshold
+    num4 = load('slots.mat', 'eliminate');num4= str2double(num4.eliminate);   %bwareopen
+    hsize = load('slots.mat', 'hsize');hsize= str2double(hsize.hsize);        %gaussian filter
+    sigma = load('slots.mat', 'sigma');sigma=str2double(sigma.sigma);
+    gaus_filt = fspecial('gaussian',hsize , sigma);
+    
+    %%SE = strel('diamond', 0);                                   %this makes a matrice object for passing into imdilate()
+    img_tmp = double(himage2);                                    %load image and convert to double for computation
+    img2 = img_tmp(:,:,1);                                        %reduce to just the first dimension
+    sub_img = (img2 - bck_img);                                   %subtract background from the image
+    gaus_img = filter2(gaus_filt,sub_img,'same');                 %gaussian blurr the image
+    thres_img = (gaus_img < num3);
+    thres_img = ~thres_img;
+    thres_img = bwareaopen(thres_img,num4);
+    thres_img = ~thres_img;
+    se2 = strel('disk',1);
+    thres_img = imerode(thres_img,se2);
+    
+    %% counting no of blobs
+    thres_img = ~thres_img;
+    [L, num] = bwlabel(thres_img);
+    stats = regionprops(L, 'Centroid');
+    thres_img = ~thres_img;
+    
+    %% highlight strange objects
+    img3 = himage2;
+    % circle parameters
+    r = 15;                                                                    % radius
+    t = linspace(0, 2*pi, 20);                                                 % approximate circle with 50 points
+    
+    for k=1:1:num
+        c = [stats(k,1).Centroid(1) stats(k,1).Centroid(2)];                   % center()
+        BW = poly2mask(r*cos(t)+c(1), r*sin(t)+c(2), size(img,1), size(img,2));% create a circular mask
+        clr = [0 0 255];            % Blue color for circle
+        a = 0.8;                    % blending factor
+        z = false(size(BW));
+        mask = cat(3,BW,z,z); img3(mask) = a*clr(1) + (1-a)*img3(mask);
+        mask = cat(3,z,BW,z); img3(mask) = a*clr(2) + (1-a)*img3(mask);
+        mask = cat(3,z,z,BW); img3(mask) = a*clr(3) + (1-a)*img3(mask);
+    end
+    %% highlight Occupied and Unoccupied slots
+    num2 = 0;
+    for k=1:1:tps
+        c = [nodes(k,1) nodes(k,2)];                   % center
+        BW = poly2mask(r*cos(t)+c(1), r*sin(t)+c(2), size(img,1), size(img,2));% create a circular mask
+        if thres_img(nodes(k,1),nodes(k,2))== 0
+            clr = [255 0 0 ];            % Red color for circle
+            num2 = num2 + 1;             % counting no of filled spots
+        else
+            clr = [0 255 0 ];            % Green color for circle
+        end
+        a = 0.8;                         % blending factor
+        z = false(size(BW));
+        mask = cat(3,BW,z,z); img3(mask) = a*clr(1) + (1-a)*img3(mask);
+        mask = cat(3,z,BW,z); img3(mask) = a*clr(2) + (1-a)*img3(mask);
+        mask = cat(3,z,z,BW); img3(mask) = a*clr(3) + (1-a)*img3(mask);
+    end
+    %% Results
+    %set the status panel
+    set(handles.text1, 'String','Total                 :');
+    set(handles.text2, 'String','Occupied         :');
+    set(handles.text3, 'String','vacant               :');
+    set(handles.text4, 'String',num2str(tps));
+    set(handles.text5, 'String',num2str(num2));
+    set(handles.text6, 'String',num2str(tps-num2));
+    
+    imagesc(img3);
+    axis off;
+    pause(.1)
+    
+end
+%%
+
+%%% Button Settings 
+% Jumps to Settings function
+function pushbutton3_Callback(hObject, eventdata, handles)
+%closePreview(vid);
+Settings()
+
+##### SOURCE END #####
+--></body></html>
